@@ -2,12 +2,14 @@ package centrivaccinali;
 import java.io.Serializable;
 import java.util.Scanner;
 
-/** classe ausiliaria che permette la gestione degli indirizzi dei centri vaccinali (oppure in un futuro ampliamento
+/**Classe ausiliaria che permette la gestione degli indirizzi dei centri vaccinali (oppure in un futuro ampliamento
  * del progetto anche quello di residenza dei vaccinati/registrati)
  * ATTENZIONE: una volta creato l'oggetto che descrive un dato indirizzo, i suoi dati NON possono
  * essere modificati per motivi di sicurezza (quindi non vi sono metodi "setter")
  * @author Alessandro Alonzi
- * @author Francesco Esposito */
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
 
 public class Indirizzo implements Serializable{
 	private static final long serialVersionUID = 1L;

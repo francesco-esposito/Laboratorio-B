@@ -1,6 +1,5 @@
 package interfacce;
 
-//interfaccia grafica iniziale che ti permette di scegliere se proseguire come operatore vaccinale o cliente
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -16,6 +15,13 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import java.awt.event.ActionListener;
+
+/**Interfaccia grafica iniziale che permette all’utente di accedere alle funzionalità riservate 
+ * per operatore vaccinali oppure normali cittadini.
+ * @author Alessandro Alonzi
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
 
 public class client {
 
@@ -59,7 +65,7 @@ public class client {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Accedi al sistema come:");
+		JLabel lblNewLabel = new JLabel("Accedi ai servizi offerti dal sistema come:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNewLabel.setBounds(10, 37, 416, 21);
@@ -68,14 +74,13 @@ public class client {
 		//bottone che permette di aprire la schermata per proseguire come operatore vaccinale
 		JButton OPvaccinale = new JButton("Operatore \nVaccinale");
 		OPvaccinale.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		OPvaccinale.setBounds(60, 119, 122, 43);
+		OPvaccinale.setBounds(10, 99, 416, 43);
 		
 		OPvaccinale.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
 				
 				frame.setVisible(false);
-				opvaccinale opv = new opvaccinale();
 				opvaccinale.main(null, db);
 			}
 		});
@@ -88,12 +93,11 @@ public class client {
 				//rende non visibile la schermata attuale 
 				frame.setVisible(false);
 				//apre una nuova schermata in questo caso quella relativa a proseguire come cittadino
-				//cittadino c = new cittadino();
 				cittadino.main(null, db);
 			}
 		});
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_1.setBounds(254, 119, 122, 43);
+		btnNewButton_1.setBounds(10, 172, 416, 43);
 		frame.getContentPane().add(btnNewButton_1);
 	}
 	private class SwingAction extends AbstractAction {
@@ -103,7 +107,6 @@ public class client {
 		}
 		public void actionPerformed(ActionEvent e) {
 			frame.setVisible(false);
-			//opvaccinale opv= new opvaccinale(db);
 			opvaccinale.main(null, db);
 		}
 	}

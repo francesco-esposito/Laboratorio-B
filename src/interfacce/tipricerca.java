@@ -1,7 +1,5 @@
 package interfacce;
 
-//permette di scegliere se effettuare una ricerca per comune e tipo o per nome viene aperta quando si accede o quando si
-//decide di procedere senza accedere o effettuando l'accesso cambiano le politiche di ricerca e inserimento
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,10 +13,19 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**Interfaccia che implementa la scelta della tipologia di ricerca che il cittadino può effettuare 
+ * (per nome oppure per comune e tipologia).
+ * @author Alessandro Alonzi
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
+
 public class tipricerca {
 
 	private JFrame frame;
 	private ServerDBMSInterface db;
+	private String userName;
+	private boolean accesso;
 
 	public void setDB(ServerDBMSInterface db){
 		this.db = db;
@@ -27,11 +34,11 @@ public class tipricerca {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args, final ServerDBMSInterface db) {
+	public static void main(final String args, final ServerDBMSInterface db, final boolean accesso) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					tipricerca window = new tipricerca();
+					tipricerca window = new tipricerca(args, accesso);
 					window.setDB(db);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
@@ -44,7 +51,9 @@ public class tipricerca {
 	/**
 	 * Create the application.
 	 */
-	public tipricerca() {
+	public tipricerca(String userName, boolean accesso) {
+		this.userName = userName;
+		this.accesso = accesso;
 		initialize();
 	}
 
@@ -53,73 +62,91 @@ public class tipricerca {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 278);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame1
-		JLabel lblNewLabel = new JLabel("Quale operazione vuoi effettuare?");
+		JLabel lblNewLabel = new JLabel("Quale tipologia di ricerca desideri effettuare?");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(10, 20, 416, 25);
 		frame.getContentPane().add(lblNewLabel);
+		
 		//bottone che permette di aprire una schermata per effettuare una ricerca per nome del centro vaccinale 
-		JButton btnNewButton = new JButton("Ricerca centro vaccinale per nome");
+		JButton btnNewButton = new JButton("Ricerca centro vaccinale in base al nome");
 		btnNewButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
 				frame.setVisible(false);
-				rnome.main(null, db);
+				
+				// ricerca senza login
+				if(!accesso) {
+					frame.setVisible(false);
+					rnome.main(null, db);
+				}
+				
+				// ricerca con login
+				else {
+					frame.setVisible(false);
+					rnomeavv.main(userName, db);
+				}
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton.setBounds(10, 84, 416, 38);
+		btnNewButton.setBounds(10, 66, 416, 38);
 		frame.getContentPane().add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Ricerca centro vaccinale per comune e tipo");
+		JButton btnNewButton_1 = new JButton("Ricerca centro vaccinale in base al comune e alla tipologia");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rcomune.main(null, db);
+				
+				// ricerca senza login
+				if(!accesso) {
+					frame.setVisible(false);
+					rcomune.main(null, db);
+				}
+				
+				// ricerca con login
+				else {
+					frame.setVisible(false);
+					rcomuneavv.main(userName, db);
+				}
 			}
 		});
+		
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_1.setBounds(10, 154, 416, 38);
+		btnNewButton_1.setBounds(10, 136, 416, 38);
 		frame.getContentPane().add(btnNewButton_1);
-		//label che viene visualizzata solo nel caso in cui l'accesso é stato effettuato-
-		JLabel lblNewLabel_1 = new JLabel("ACCESSO ESEGUITO");
-		lblNewLabel_1.setEnabled(true);
-		lblNewLabel_1.setVisible(false);
-		if(accedi.accesso)
-			lblNewLabel_1.setVisible(true);
-		lblNewLabel_1.setBounds(10, 214, 134, 13);
-		frame.getContentPane().add(lblNewLabel_1);
+		
 		//bottone che permette di tornare alla schermata precedente, il login viene annullato 
 		JButton btnNewButton_2 = new JButton("\uD83D\uDD19");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			//se torna indietro esce dal login
-			accedi.accesso=false;
 			frame.setVisible(false);
 			cittadino.main(null, db);
 			}
 		});
-		btnNewButton_2.setBounds(309, 0, 52, 21);
+		btnNewButton_2.setBounds(10, 210, 52, 21);
 		frame.getContentPane().add(btnNewButton_2);
 		//bottone che permettte di tornare alla home di cittadino, il login viene annullato 
 		JButton btnNewButton_2_1 = new JButton("\u2302");
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//se torna alla home esce dal login
-				accedi.accesso=false;
 				frame.setVisible(false);
-				client.main(null, null);
+				client.main(null, db);
 			}
 		});
-		btnNewButton_2_1.setBounds(358, 0, 57, 21);
+		btnNewButton_2_1.setBounds(369, 210, 57, 21);
 		frame.getContentPane().add(btnNewButton_2_1);
-		//scritta che viene stampata informa che nel caso in cui si ha effettuato il login e si torna indietro 
-		//bisognera effettuarlo nuovamente
-		JLabel lblNewLabel_10 = new JLabel("tornando alla home o indietro dovrai rieffettuare l'accesso");
-		lblNewLabel_10.setBounds(37, 4, 272, 13);
-		frame.getContentPane().add(lblNewLabel_10);
+		
+		if (accesso) {
+			JLabel lblNewLabel_11 = new JLabel("Accesso effettuato come " + userName);
+			lblNewLabel_11.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblNewLabel_11.setBounds(10, 193, 416, 17);
+			frame.getContentPane().add(lblNewLabel_11);
+			lblNewLabel_11.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_11.setVisible(true);
+		}
 	}
 }

@@ -2,12 +2,14 @@ package centrivaccinali;
 import java.io.Serializable;
 import java.util.Scanner;
 
-/** classe ausiliaria che permette la creazione di oggetti che consentono di descrivere
-  * qualsiasi centro vaccinale memorizzandone le informazioni richieste
-  * ATTENZIONE: una volta creato l'oggetto che descrive una struttura vaccinale, i suoi dati NON possono
-  * essere modificati per motivi di sicurezza (quindi non vi sono metodi "setter")
-  * @author Alessandro Alonzi
-  * @author Francesco Esposito */
+/**Classe ausiliaria che permette la creazione di oggetti che consentono di descrivere
+ * qualsiasi centro vaccinale memorizzandone le informazioni richieste
+ * ATTENZIONE: una volta creato l'oggetto che descrive una struttura vaccinale, i suoi dati NON possono
+ * essere modificati per motivi di sicurezza (quindi non vi sono metodi "setter")
+ * @author Alessandro Alonzi
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
 
 public class CentroVacc implements Serializable {
 	private static final long serialVersionUID = 1L;

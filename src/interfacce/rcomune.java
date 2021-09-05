@@ -25,6 +25,13 @@ import centrivaccinali.CentroVacc;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+/**Interfaccia che implementa la funzionalità di ricerca di una struttura vaccinale 
+ * per comune e tipologia.
+ * @author Alessandro Alonzi
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
+
 public class rcomune {
 
 	public JFrame frame;
@@ -50,7 +57,7 @@ public class rcomune {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args, final ServerDBMSInterface db) {
+	public static void main(String args, final ServerDBMSInterface db) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -70,13 +77,20 @@ public class rcomune {
 	private void initialize() {
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 770, 630);
+		frame.setBounds(100, 100, 770, 638);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		final JLabel lblNewLabel_7 = new JLabel("Non sono ancora state rilasciate informazioni per questo centro");
+		lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_7.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_7.setBounds(10, 415, 736, 25);
+		lblNewLabel_7.setVisible(false);
+		frame.getContentPane().add(lblNewLabel_7);
+		
 		//pannello all'interno della tabella che permette di scorrere gli elementi
 		final JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 150, 736, 136);
+		scrollPane.setBounds(10, 150, 736, 95);
 		frame.getContentPane().add(scrollPane);
 		
 		//tabella dove dovranno essere stampati i dati provenienti dal db
@@ -88,7 +102,7 @@ public class rcomune {
 		
 		//pannello all'interno della tabella che permette di scorrere gli elementi
 		final JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 372, 736, 99);
+		scrollPane_1.setBounds(10, 364, 736, 120);
 		frame.getContentPane().add(scrollPane_1);
 		
 		//tabella riepilogo sintomi
@@ -101,65 +115,87 @@ public class rcomune {
 		
 		//permette di scrivere del testo all'interno
 		textField = new JTextField();
-		textField.setBounds(10, 74, 96, 19);
+		textField.setBounds(10, 74, 155, 19);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
 		//permette di scrivere del testo all'interno
 		textField_1 = new JTextField();
 		textField_1.setEnabled(false);
-		textField_1.setBounds(10, 348, 96, 19);
+		textField_1.setBounds(10, 336, 52, 21);
 		frame.getContentPane().add(textField_1);
 		textField_1.setColumns(10);
 		
 		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame 
-		JLabel lblNewLabel = new JLabel("Ricerca per nome ");
+		JLabel lblNewLabel = new JLabel("RICERCA PER COMUNE E TIPOLOGIA");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(10, 10, 416, 25);
+		lblNewLabel.setBounds(10, 10, 736, 25);
 		frame.getContentPane().add(lblNewLabel);
 		
 		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame 
-		JLabel lblNewLabel_1 = new JLabel("Inserisi il comune e la tipologia di centro vaccinale che vuoi ricercare.");
+		final JLabel lblNewLabel_1 = new JLabel("Inserisci comune e tipologia centro");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(10, 42, 705, 25);
 		frame.getContentPane().add(lblNewLabel_1);
-		
-		//permette di inseire del testo
-		textField_2 = new JTextField();
-		textField_2.setEnabled(false);
-		textField_2.setBounds(10, 504, 96, 19);
-		frame.getContentPane().add(textField_2);
-		textField_2.setColumns(10);
-		
-		
-
 		
 		final JLabel lblNewLabel_2 = new JLabel("Tabella con i centri vaccinali trovati");
 		lblNewLabel_2.setEnabled(false);
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_2.setBounds(403, 130, 343, 21);
+		lblNewLabel_2.setBounds(419, 111, 327, 39);
 		frame.getContentPane().add(lblNewLabel_2);
 		
-		
-		
-		final JLabel lblNewLabel_1_1 = new JLabel("Inserire la key del centro per informazioni aggiuntive");
+		final JLabel lblNewLabel_1_1 = new JLabel("Inserire la key del centro indicata nella tabella da");
 		lblNewLabel_1_1.setEnabled(false);
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1_1.setBounds(10, 325, 416, 21);
+		lblNewLabel_1_1.setBounds(10, 290, 548, 21);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
+		final JLabel lblNewLabel_8 = new JLabel("visualizzare informazioni aggiuntive");
+		lblNewLabel_8.setEnabled(false);
+		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_8.setBounds(10, 307, 464, 19);
+		frame.getContentPane().add(lblNewLabel_8);
 		
 		
-		final JLabel lblNewLabel_3 = new JLabel("Tabella con info agguntive");
+		
+		final JLabel lblNewLabel_3 = new JLabel("Tabella con informazioni agguntive");
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_3.setEnabled(false);
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_3.setBounds(409, 334, 325, 39);
+		lblNewLabel_3.setBounds(419, 329, 327, 39);
 		frame.getContentPane().add(lblNewLabel_3);
 		
+		final JLabel lblNewLabel_4 = new JLabel("Informazioni aggiuntive");
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNewLabel_4.setEnabled(false);
+		lblNewLabel_4.setBounds(10, 255, 736, 29);
+		frame.getContentPane().add(lblNewLabel_4);
 		
-		final JButton btnNewButton_1 = new JButton("Informazioni aggiuntive");
+		final JLabel lblNewLabel_5 = new JLabel("label vuota");
+		lblNewLabel_5.setVisible(false);
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_5.setBounds(10, 496, 736, 19);
+		frame.getContentPane().add(lblNewLabel_5);
+		
+		final JLabel lblNewLabel_6 = new JLabel("New label");
+		lblNewLabel_6.setVisible(false);
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_6.setBounds(10, 519, 736, 19);
+		frame.getContentPane().add(lblNewLabel_6);
+		
+		final JLabel lblNewLabel_9 = new JLabel("New label");
+		lblNewLabel_9.setVisible(false);
+		lblNewLabel_9.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_9.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_9.setBounds(10, 541, 736, 19);
+		frame.getContentPane().add(lblNewLabel_9);
+		
+		final JButton btnNewButton_1 = new JButton("Conferma");
 		
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -169,11 +205,28 @@ public class rcomune {
 				
 					lblNewLabel_3.setEnabled(true);
 					scrollPane_1.setEnabled(true);
+					lblNewLabel_5.setVisible(true);
+					lblNewLabel_6.setVisible(true);
+					lblNewLabel_9.setVisible(true);
+					
 					
 					CentroVacc centro = centri.get(Integer.parseInt(textField_1.getText()));
 					
-					// INFO DA STAMPARE - CREAZIONE LABEL
-					centro.tostring();
+					lblNewLabel_6.setText(centro.getNome().toUpperCase());
+					
+					lblNewLabel_5.setText(
+							"Indirizzo struttura: "
+							+  centro.getIndirizzo().getQualificatore()
+							+ " " + centro.getIndirizzo().getNome().substring(0, 1).toUpperCase() + centro.getIndirizzo().getNome().substring(1)
+							+ " " + centro.getIndirizzo().getCivico().toUpperCase()
+							+ " " + centro.getIndirizzo().getComune().substring(0,1).toUpperCase() + centro.getIndirizzo().getComune().substring(1) + ","
+							+ " (" + centro.getIndirizzo().getProvincia() + ")"
+							+ " " + centro.getIndirizzo().getCAP());
+					
+					lblNewLabel_9.setText("Tipologia struttura: " + centro.getTipologia().toUpperCase());
+					
+					btnNewButton_1.setEnabled(false);
+					textField_1.setEnabled(false);
 					
 					try {
 						
@@ -182,7 +235,9 @@ public class rcomune {
 						
 						if(sev == null) {
 							
-							// no recensioni
+							lblNewLabel_7.setVisible(true);
+							scrollPane_1.setVisible(false);
+							lblNewLabel_3.setVisible(false);
 						}
 						
 						else {
@@ -221,69 +276,13 @@ public class rcomune {
 		
 		btnNewButton_1.setEnabled(false);
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_1.setBounds(116, 348, 231, 21);
+		btnNewButton_1.setBounds(81, 336, 119, 21);
 		frame.getContentPane().add(btnNewButton_1);
-		
-		final JButton btnNewButton_2 = new JButton("Ottieni informazioni aggiuntive");
-		
-		btnNewButton_2.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
-				
-				lblNewLabel_1_1.setEnabled(true);
-				textField_1.setEnabled(true);
-				btnNewButton_1.setEnabled(true);
-				
-			}
-		});
-		
-		btnNewButton_2.setEnabled(false);
-		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_2.setBounds(10, 294, 337, 21);
-		frame.getContentPane().add(btnNewButton_2);
-		
-		
-		final JLabel lblNewLabel_4 = new JLabel("Per inserire effetti avversi accedi");
-		lblNewLabel_4.setEnabled(true);
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_4.setBounds(363, 481, 371, 13);
-		frame.getContentPane().add(lblNewLabel_4);
-		
-		final JLabel lblNewLabel_6 = new JLabel("Inserire la key del centro per inserire eff avversi");
-		lblNewLabel_6.setEnabled(false);
-		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_6.setBounds(10, 481, 325, 13);
-		frame.getContentPane().add(lblNewLabel_6);
-		
-		
-		final JLabel lblNewLabel_5 = new JLabel("Ricerca e seleziona il C.V. per inserire effetti avversi");
-		lblNewLabel_5.setEnabled(false);
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_5.setBounds(363, 504, 371, 13);
-		frame.getContentPane().add(lblNewLabel_5);
 		
 		final JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Ospedaliero", "Aziendale", "Hub"}));
-		comboBox.setBounds(10, 103, 96, 21);
+		comboBox.setBounds(10, 103, 155, 21);
 		frame.getContentPane().add(comboBox);
-		
-		final JButton btnNewButton_3 = new JButton("Inserisci effetti avversi");
-		btnNewButton_3.setEnabled(false);
-		
-			
-		btnNewButton_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		/*btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				inseffavv iea = new inseffavv();
-				iea.main(null);
-				
-			}
-		});*/
-		
-		btnNewButton_3.setBounds(10, 524, 337, 21);
-		frame.getContentPane().add(btnNewButton_3);
-		
 		
 		final JButton btnNewButton = new JButton("Avvia la ricerca");
 		
@@ -300,27 +299,20 @@ public class rcomune {
 					// memorizzazione dati in una HashMap
 					try {
 						
-						centri = db.searchCentro(textField.getText().toLowerCase(), 
+						centri = db.cercaCentroVaccinale(textField.getText().toLowerCase(), 
 								comboBox.getSelectedItem().toString().toLowerCase());
 					
 						// se la ricerca non ha prodotto risultati --> quindi hashmap non vuota
 						if(!centri.isEmpty()) {
 							
-							//se l'accesso é stato effettuato 
-							//setta visibile le parti riservate solo a chi accede cioe l'inserimento di effetti avversi
-							if(accedi.accesso){
-								btnNewButton_3.setEnabled(true);
-								lblNewLabel_5.setEnabled(true);
-								textField_2.setEnabled(true);
-								lblNewLabel_6.setEnabled(true);
-								lblNewLabel_4.setEnabled(false);
-								
-							} else {
-								lblNewLabel_4.setEnabled(true);
-							}
+							lblNewLabel_1_1.setEnabled(true);
+							lblNewLabel_8.setEnabled(true);
+							textField_1.setEnabled(true);
+							btnNewButton_1.setEnabled(true);
+							lblNewLabel_3.setEnabled(true);
 							
 							lblNewLabel_2.setEnabled(true);
-							btnNewButton_2.setEnabled(true);
+							
 							scrollPane.setEnabled(true);
 							
 							// per ogni centro memorizzato nella tabella hash
@@ -332,7 +324,9 @@ public class rcomune {
 							}
 							
 							JOptionPane.showMessageDialog(null, "Ricerca conclusa con successo.");
-							btnNewButton.setVisible(false);
+							btnNewButton.setEnabled(false);
+							textField.setEnabled(false);
+							lblNewLabel_4.setEnabled(true);
 
 					}
 					else 
@@ -354,7 +348,7 @@ public class rcomune {
 		});
 		
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton.setBounds(129, 108, 155, 21);
+		btnNewButton.setBounds(185, 103, 155, 21);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_4 = new JButton("\uD83D\uDD19");
@@ -362,10 +356,10 @@ public class rcomune {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				frame.setVisible(false);
-				tipricerca.main(null, db);
+				tipricerca.main(null, db, false);
 			}
 		});
-		btnNewButton_4.setBounds(609, 0, 52, 21);
+		btnNewButton_4.setBounds(10, 570, 52, 21);
 		frame.getContentPane().add(btnNewButton_4);
 		
 		JButton btnNewButton_2_1 = new JButton("\u2302");
@@ -376,12 +370,11 @@ public class rcomune {
 				client.main(null, db);
 			}
 		});
-		btnNewButton_2_1.setBounds(658, 0, 57, 21);
+		btnNewButton_2_1.setBounds(689, 570, 57, 21);
 		frame.getContentPane().add(btnNewButton_2_1);
 		
-		JLabel lblNewLabel_10 = new JLabel("tornando alla home dovrai effetttuare nuovamente l'accesso");
-		lblNewLabel_10.setBounds(322, 4, 288, 13);
-		frame.getContentPane().add(lblNewLabel_10);
-			
+
+		
+		
 	}
 }

@@ -15,8 +15,13 @@ import backenddb.ServerDBMSInterface;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-//schermata principale se scegli di procedere come operatore vaccinale,
-//permette di scegliere se registrare un nuovo vaccinato o inserire un nuovo centro vaccinale 
+
+/**Interfaccia che mostra tutte le funzionalità che il sistema offre per gli operatori vaccinali.
+ * @author Alessandro Alonzi
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
+
 public class opvaccinale {
 
 	JFrame frame;
@@ -56,7 +61,7 @@ public class opvaccinale {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 281);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame 
@@ -75,7 +80,7 @@ public class opvaccinale {
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton.setBounds(84, 89, 273, 30);
+		btnNewButton.setBounds(10, 89, 416, 30);
 		frame.getContentPane().add(btnNewButton);
 		//bottone che apre la schermata per inserire un nuovo vaccinato
 		JButton btnNewButton_1 = new JButton("Registra nuovo vaccinato");
@@ -87,7 +92,7 @@ public class opvaccinale {
 			}
 		});
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_1.setBounds(84, 155, 273, 30);
+		btnNewButton_1.setBounds(10, 155, 416, 30);
 		frame.getContentPane().add(btnNewButton_1);
 		//bottone che permette di tornare alla schermata principale
 		JButton btnNewButton_2 = new JButton("\uD83D\uDD19");
@@ -98,7 +103,7 @@ public class opvaccinale {
 				client.main(null, db);
 			}
 		});
-		btnNewButton_2.setBounds(304, 0, 52, 21);
+		btnNewButton_2.setBounds(10, 213, 52, 21);
 		frame.getContentPane().add(btnNewButton_2);
 		//bottone che permette di tornare alla home 
 		JButton btnNewButton_2_1 = new JButton("\u2302");
@@ -109,7 +114,7 @@ public class opvaccinale {
 				client.main(null, db);
 			}
 		});
-		btnNewButton_2_1.setBounds(353, 0, 57, 21);
+		btnNewButton_2_1.setBounds(369, 213, 57, 21);
 		frame.getContentPane().add(btnNewButton_2_1);
 	}
 

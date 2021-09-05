@@ -17,41 +17,51 @@ import java.util.Random;
 import centrivaccinali.CentroVacc;
 import centrivaccinali.Indirizzo;
 
+/**Classe che codifica la componente server del sistema, cioè, quella che si occupa della gestione
+ * dei dati e dell'interfacciamento con il database tramite il DBMS. 
+ * Sono presenti tutte le codifiche che consentono quindi l'apertura della connessione e le
+ * relative istruzioni in sintassi SQL per la manipolazione delle informazioni.
+ * @author Alessandro Alonzi
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
+
 public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterface {
 	
 	private static final long serialVersionUID = 1L;
 	private final String DRIVER = "org.postgresql.Driver";
 	private final String DBURL = "jdbc:postgresql:progettolab";
-	private final String DBUSERNAME = "postgres";
-	private final String DBPASSWORD = "Alessandro1900";
+	//private final String DBUSERNAME = "postgres";
+	//private final String DBPASSWORD = "Alessandro1900";
 	private Connection con;
 	private Statement stmt;
 	// formattatore di date
 	private DateTimeFormatter dtf;
 	
 	// inizializzazione parametri connessione
-	public ServerDBMS() throws RemoteException {
+	public ServerDBMS(String userNameDB, String passwordDB) throws RemoteException {
 		super();
 		try {
-			con = initDB();
+			con = initDB(userNameDB, passwordDB);
 			stmt = con.createStatement();
 			System.out.println("Inizializzazione PostGreeSQL database eseguita correttamente.");
 			dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss:SS");
 		} catch (ClassNotFoundException | SQLException e) {e.printStackTrace();}
 	}
 	
-	public Connection initDB() throws SQLException, ClassNotFoundException, RemoteException {
+	public Connection initDB(String userNameDB, String passwordDB) throws SQLException, ClassNotFoundException, RemoteException {
 		
 		// collegamento al driver
 		Class.forName(DRIVER);
 		
 		// stabilimento connessione tramite driver manager
-		return DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
+		return DriverManager.getConnection(DBURL, userNameDB, passwordDB);
 	}
 	
-	// metodo che consente di identificare duplicati (e non solo) determinando se una data row è presente in una determinata tabella
-	// (evita anche eccezioni dovute alla violazione di vincoli che agiscono sull'univocità delle info)
-	// restituisce true se la row è già presente nella tabella, false altrimenti
+	/**@return metodo che consente di identificare duplicati (e non solo) determinando se una data row è presente in una determinata tabella
+	 * (evita anche eccezioni dovute alla violazione di vincoli che agiscono sull'univocità delle info)
+	 * restituisce true se la row è già presente nella tabella, false altrimenti
+	 */
 	public synchronized boolean rowChecking(String table, String condizione) throws SQLException {
 		
 		// query per la ricerca di tutti i dati da un tabella data una certa condizione
@@ -66,11 +76,13 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		else return true;
 	}
 	
-	// metodo che consente l'inserimento di un centro nel DB
-	// restituisce TRUE se l'operazione di registrazione di un nuovo centro va a buon fine, FALSE altrimenti
-	// nel secondo caso, oltre ad eventuali eccezioni, si può verificare il caso in cui il centro sia già
-	// stato registrato
-	public synchronized boolean insertCentro(String nome, String tipologia, String qualificatore, String nomeIndirizzo, String comune,
+	/**@return metodo che consente l'inserimento di un centro nel DB
+	 * restituisce TRUE se l'operazione di registrazione di un nuovo centro va a buon fine, FALSE altrimenti
+	 * nel secondo caso, oltre ad eventuali eccezioni, si può verificare il caso in cui il centro sia già
+	 * stato registrato 
+	 */
+	
+	public synchronized boolean registraCentroVaccinale(String nome, String tipologia, String qualificatore, String nomeIndirizzo, String comune,
 			String provincia, int CAP, String civico) throws SQLException, RemoteException {
 		
 		// stringa contenente clausola where comando SQL per la ricerca di centri duplicati
@@ -118,11 +130,13 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		}
 	}
 	
-	// metodo che consente l'inserimento di un centro nel DB
-	// restituisce TRUE se l'operazione di registrazione di un nuovo vaccinato va a buon fine, FALSE altrimenti
-	// nel secondo caso, oltre ad eventuali eccezioni, si può verificare il caso in cui il vaccinato sia già
-	// stato registrato
-	public synchronized String insertVaccinato(String CF, String nome, String cognome, String nomeCentro,
+   /**@return metodo che consente l'inserimento di un centro nel DB
+	* restituisce TRUE se l'operazione di registrazione di un nuovo vaccinato va a buon fine, FALSE altrimenti
+	* nel secondo caso, oltre ad eventuali eccezioni, si può verificare il caso in cui il vaccinato sia già
+	* stato registrato
+	*/ 
+	
+	public synchronized String registraVaccinato(String CF, String nome, String cognome, String nomeCentro,
 			String data, String vaccino) throws SQLException, RemoteException, InterruptedException {	
 		
 		String where =
@@ -217,19 +231,20 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		else {
 			
 			System.out.println("\n" + dtf.format(LocalDateTime.now()) + " - Il centro \"" + nomeCentro.toUpperCase() 
-			+ "\"non esiste nel sistema. Nome specificato errato.");
+			+ "\" non esiste nel sistema. Nome specificato errato.");
 			
 			return "0";
 		}
 	}
 
-	// metodo che consente la ricerca di un dato centro nel DB
-	// restituisce una hashmap contenente una lista di centri se la ricerca va a buon fine, altrimenti
-	// restituirà una hashmap vuota
-	public synchronized HashMap<Integer, CentroVacc> searchCentro( String par1, String par2 ) 
+   /**@return metodo che consente la ricerca di un dato centro nel DB
+	* restituisce una hashmap contenente una lista di centri se la ricerca va a buon fine, altrimenti
+	* restituirà una hashmap vuota
+	*/
+	
+	public synchronized HashMap<Integer, CentroVacc> cercaCentroVaccinale( String par1, String par2 ) 
 			throws SQLException, RemoteException {
 		
-		boolean trovato = false;
 		HashMap<Integer,CentroVacc> centri = new HashMap<Integer, CentroVacc>();
 		
 		// ricerca per nome
@@ -331,7 +346,7 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		
 	}
 
-	// metodo che consente la visualizzazione di informazioni (media) legate ad un determinato centro estrapolate dal DB
+	/**@return metodo che consente la visualizzazione di informazioni (media) legate ad un determinato centro estrapolate dal DB */
 	public synchronized String[] infoAVGCentro(String nomecentro) throws SQLException, RemoteException {
 		
 		String[] avg = new String[6];
@@ -405,8 +420,9 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		else return count;
 	}
 	
-	// metodo che consente di prelevare il valore relativo al numero di segnalazioni sintomi post vaccinazioni 
-	// calcolandolo in base ai dati presenti in un certo momento nel DB
+   /**@return metodo che consente di prelevare il valore relativo al numero di segnalazioni sintomi post vaccinazioni 
+	* calcolandolo in base ai dati presenti in un certo momento nel DB
+	*/
 	public double count(String nomeColDB, String newNomeCol, String nomecentro) throws SQLException {
 		
 		// valore conteggio
@@ -427,11 +443,12 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		return count;
 	}
 
-	// metodo che consente l'inserimento di un cittadino nel DB
-	// restituisce TRUE se l'operazione di registrazione di un nuovo cittadino va a buon fine, FALSE altrimenti
-	// nel secondo caso, oltre ad eventuali eccezioni, si può verificare il caso in cui il cittadino sia già
-	// stato registrato
-	public synchronized boolean insertCittadino (String CF, String nome, String cognome, String email, 
+   /**@return metodo che consente l'inserimento di un cittadino nel DB
+	* restituisce TRUE se l'operazione di registrazione di un nuovo cittadino va a buon fine, FALSE altrimenti
+	* nel secondo caso, oltre ad eventuali eccezioni, si può verificare il caso in cui il cittadino sia già
+	* stato registrato
+	*/
+	public synchronized boolean registraCittadino (String CF, String nome, String cognome, String email, 
 		String UID, String password, String VID) throws SQLException, RemoteException {
 		
 		// condizione clausola where
@@ -462,13 +479,13 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 				
 				// stringa contenente comando in sintassi SQL
 				String cmd = "INSERT INTO cittadini_registrati VALUES ("
-							 + VID + "," 
-							 + "'" + CF.toUpperCase() + "'," 
-							 + "'" + nome.toLowerCase() + "',"  
-							 + "'" + cognome.toLowerCase() + "'," 
-							 + "'" + email.toLowerCase() + "',"  
-							 + "'" + UID + "',"  
-							 + "'" + password + "')"; 
+						+ "'" + CF.toUpperCase() + "',"	 
+						+ VID + "," 
+						+ "'" + UID + "'," 
+						+ "'" + password + "',"
+						+ "'" + nome.toLowerCase() + "',"  
+						+ "'" + cognome.toLowerCase() + "'," 
+						+ "'" + email.toLowerCase() + "')";  
 		
 				// esecuzione comando tramite DBMS
 				stmt.executeUpdate(cmd);
@@ -482,8 +499,9 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		
 	}
 
-	// metodo che consente all'utente registrato di accedere al sistema e restituisce una stringa contenente il suo UID se
-	// se l'operazione va a buon fine oppure una stringa vuota
+   /**@return metodo che consente all'utente registrato di accedere al sistema e restituisce una stringa contenente il suo UID se
+	* se l'operazione va a buon fine oppure una stringa vuota
+	*/
 	public synchronized String login(String name, String password) 
 			throws SQLException, RemoteException {
 		
@@ -516,9 +534,10 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		
 	}
 
-	// metodo che consente di registrare nel DB eventuali eventi avversi avvenuti dopo la vaccinazione per COVID19.
-	// restituisce TRUE se l'operazione va a buon fine, FALSE altrimenti
-	public synchronized boolean insertEventiAvversi(String uid, 
+   /**@return metodo che consente di registrare nel DB eventuali eventi avversi avvenuti dopo la vaccinazione per COVID19.
+	* restituisce TRUE se l'operazione va a buon fine, FALSE altrimenti
+	*/
+	public synchronized boolean inserisciEventiAvversi(String uid, 
 			String nomecentro, String[] sev, String note) throws SQLException, RemoteException {
 		
 		String where = "uid = '" + uid + "'";
@@ -596,7 +615,7 @@ public class ServerDBMS extends UnicastRemoteObject implements ServerDBMSInterfa
 		try{  
 		    
 			// creazione oggetto server
-			ServerDBMS obj = new ServerDBMS();
+			ServerDBMS obj = new ServerDBMS(args[0], args[1]);
 		    
 			// creazione registro per la memorizzazione del riferimento remoto al server
 			Registry registro = LocateRegistry.createRegistry(1099);

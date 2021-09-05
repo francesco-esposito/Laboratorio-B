@@ -4,14 +4,13 @@ Esposito Francesco 739888 VA */
 package cittadini;
 import java.util.Scanner;
 
-
-
-/** classe ausiliaria che permette la creazione di oggetti che consentono di descrivere
+/**Classe ausiliaria che permette la creazione di oggetti che consentono di descrivere
  * un un cittadino memorizzandone le informazioni richieste
  * ATTENZIONE: una volta creato l'oggetto che descrive un dato indirizzo, i suoi dati NON possono
  * essere modificati per motivi di sicurezza (quindi non vi sono metodi "setter")
  * @author Alessandro Alonzi
- * @author Francesco Esposito
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
  */
 
 public class Cittadino {

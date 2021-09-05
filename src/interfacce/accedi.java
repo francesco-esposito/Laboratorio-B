@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import backenddb.ServerDBMSInterface;
-import cittadini.Cittadini;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.HeadlessException;
@@ -20,6 +19,12 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+
+/**Interfaccia che implementa la funzionalità di login nel sistema per un cittadino. 
+ * @author Alessandro Alonzi
+ * @author Daniel Pedrotti
+ * @author Francesco Esposito 
+ */
 
 public class accedi {
 	public static boolean accesso=false;
@@ -51,6 +56,10 @@ public class accedi {
 					accedi window = new accedi();
 					window.setDB(db);
 					window.frame.setVisible(true);
+					JOptionPane.showMessageDialog(null, "Per utilizzare questa funzionalità è necessario \n"
+							+ "essere registrati nel sistema e aver effettuato \nl'accesso con le proprie credenziali.",
+						    "Inane error",
+						    JOptionPane.INFORMATION_MESSAGE);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,38 +72,33 @@ public class accedi {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 410, 314);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame 
-		JLabel lblNewLabel = new JLabel("Accedi");
+		JLabel lblNewLabel = new JLabel("Inserisci le credenziali");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(10, 20, 416, 24);
+		lblNewLabel.setBounds(10, 20, 376, 24);
 		frame.getContentPane().add(lblNewLabel);
 		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame 
-		JLabel lblNewLabel_1 = new JLabel("Inserisci dati per accedere");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(10, 61, 183, 13);
-		frame.getContentPane().add(lblNewLabel_1);
-		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame 
-		JLabel lblNewLabel_2 = new JLabel("Username");
+		JLabel lblNewLabel_2 = new JLabel("Nome utente ");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_2.setBounds(10, 100, 124, 13);
+		lblNewLabel_2.setBounds(10, 69, 124, 13);
 		frame.getContentPane().add(lblNewLabel_2);
 		//permette di scrivere all'interno del testo
 		textField = new JTextField();
-		textField.setBounds(10, 123, 124, 19);
+		textField.setBounds(130, 68, 124, 19);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		//creazione di una label e imposta i vari campi (posizione, font) inoltre lo aggiunge al frame 
 		JLabel lblNewLabel_3 = new JLabel("Password");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_3.setBounds(173, 102, 135, 13);
+		lblNewLabel_3.setBounds(10, 108, 135, 13);
 		frame.getContentPane().add(lblNewLabel_3);
 		//permette di scrivere all'interno del testo di tipo password cioe non si vede quello che é stato scritto
 		passwordField = new JPasswordField();
-		passwordField.setBounds(173, 123, 124, 19);
+		passwordField.setBounds(130, 107, 124, 19);
 		frame.getContentPane().add(passwordField);
 		
 		//bottone che serve per dare la conferma dei dati inseriti e procedere con l'accesso 
@@ -117,8 +121,10 @@ public class accedi {
 						
 						else { 
 							
-							JOptionPane.showMessageDialog(null, "Operazione avvenuta con successo");
+							JOptionPane.showMessageDialog(null, "Operazione avvenuta con successo. \nTornando "
+									+ "alla home del sistema, le credenziali\ninserite non saranno più valide.");
 							frame.setVisible(false);
+							tipricerca.main(userName, db, true);
 							
 						}
 					
@@ -136,7 +142,7 @@ public class accedi {
 		});
 		
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton.setBounds(341, 232, 85, 21);
+		btnNewButton.setBounds(130, 153, 124, 21);
 		frame.getContentPane().add(btnNewButton);
 		
 		
@@ -148,7 +154,7 @@ public class accedi {
 				cittadino.main(null, db);
 			}
 		});
-		btnNewButton_1.setBounds(292, 0, 52, 21);
+		btnNewButton_1.setBounds(10, 246, 52, 21);
 		frame.getContentPane().add(btnNewButton_1);
 		//bottone per tornare alla home
 		JButton btnNewButton_2 = new JButton("\u2302");
@@ -158,8 +164,25 @@ public class accedi {
 				client.main(null, db);
 			}
 		});
-		btnNewButton_2.setBounds(341, 0, 57, 21);
+		btnNewButton_2.setBounds(329, 246, 57, 21);
 		frame.getContentPane().add(btnNewButton_2);
+		
+		JLabel lblNewLabel_1 = new JLabel("oppure, se non possiedi ancora un account");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setBounds(10, 204, 376, 19);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JButton btnNewButton_3 = new JButton("REGISTRATI");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				regcittadino.main(null, db);
+			}
+		});
+		btnNewButton_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnNewButton_3.setBounds(130, 233, 124, 21);
+		frame.getContentPane().add(btnNewButton_3);
 	}
 
 
